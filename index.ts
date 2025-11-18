@@ -89,11 +89,10 @@ app.get('/', adminPageAuth);
 
 
 // Vercel serverless function entry point
-let appPromise;
+let app;
 export default async (req, res) => {
-  if (!appPromise) {
-    appPromise = startServer();
+  if (!app) {
+    app = await startServer();
   }
-  const app = await appPromise;
   app(req, res);
 };
