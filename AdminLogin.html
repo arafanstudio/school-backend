@@ -163,7 +163,10 @@
                 });
 
                 if (response.ok) {
-                    // Simple authentication: store a flag in sessionStorage
+                    // Simple authentication: store a flag in sessionStorage and set a cookie for the server
+                    sessionStorage.setItem("isAdminAuthenticated", "true");
+                    // Set a cookie that the server can read
+                    document.cookie = "isAdminAuthenticated=true; path=/; max-age=3600"; // Expires in 1 hour
                     sessionStorage.setItem("isAdminAuthenticated", "true");
                     sessionStorage.setItem("ADMIN_USERNAME", username);
                     sessionStorage.setItem("ADMIN_PASSWORD", password);

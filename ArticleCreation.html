@@ -198,6 +198,8 @@
             sessionStorage.removeItem("isAdminAuthenticated");
             sessionStorage.removeItem("ADMIN_USERNAME");
             sessionStorage.removeItem("ADMIN_PASSWORD");
+            // Clear the cookie to log out on the server side
+            document.cookie = "isAdminAuthenticated=; path=/; max-age=0";
             showToast("Logged out successfully.", 'success');
             window.location.href = "/";
         });
