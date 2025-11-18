@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f4f4f4; }
+        .login-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 300px; }
+        h2 { text-align: center; color: #333; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 10px; margin: 8px 0 16px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #4CAF50; color: white; padding: 14px 20px; margin: 8px 0; border: none; border-radius: 4px; cursor: pointer; width: 100%; }
+        button:hover { opacity: 0.8; }
+        .message { text-align: center; margin-top: 10px; color: red; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Admin Login</h2>
+        <form id="loginForm">
+            <label for="username"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="username" id="username" required>
+
+            <label for="password"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="password" id="password" required>
+
+            <button type="submit">Login</button>
+            <p id="message" class="message"></p>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const messageElement = document.getElementById('message');
+        const backendUrl = window.location.origin; // The backend's own URL
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            messageElement.textContent = 'Logging in...';
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // The admin login API is already at /api/admin/login
+                const response = await fetch(`${backendUrl}/api/admin/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageElement.textContent = 'Login successful! Redirecting to dashboard...';
+                    messageElement.style.color = 'green';
+                    // In a real app, you'd get a token and redirect to a dashboard.
+                    // For this simple fix, we'll just show a success message.
+                    // To simulate a dashboard, we'll replace the form with a simple message.
+                    document.body.innerHTML = '<div class="login-container"><h2>Admin Dashboard</h2><p>Welcome, Admin! You are logged in.</p><p>You can now manage your content.</p><p><a href="https://school-frontend-opal.vercel.app/">Go back to Frontend</a></p></div>';
+                } else {
+                    messageElement.textContent = data.message || 'Login failed. Check your credentials.';
+                    messageElement.style.color = 'red';
+                }
+            } catch (error) {
+                messageElement.textContent = 'An error occurred during login.';
+                messageElement.style.color = 'red';
+                console.error('Login error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

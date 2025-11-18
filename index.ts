@@ -41,9 +41,11 @@ async function startServer() {
     res.json({ message: "Login successful" });
   });
 
-  // Root route for health check or simple message
+    // Root route for Admin Login Page
   app.get("/", (req, res) => {
-    res.status(200).send("Backend API is running!");
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    res.sendFile(path.join(__dirname, "admin_login.html"));
   });
 
   // Export the app for Vercel serverless function
