@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -6,7 +6,6 @@ import dotenv from "dotenv";
 import { initializeDatabase } from "./db";
 import cors from "cors";
 import articleRouter from "./routes/article";
-import pool from "./db"; // Import pool for article creation
 
 dotenv.config({ path: "./.env" });
 
@@ -20,7 +19,7 @@ async function startServer() {
   }));
 
   // Admin Authentication Middleware
-  const adminAuth = (req: Request, res: Response, next: NextFunction) => {
+  const adminAuth = (req, res, next) => {
     const { username, password } = req.body;
     if (
       username === process.env.ADMIN_USERNAME &&
@@ -35,46 +34,15 @@ async function startServer() {
   // API Routes
   app.use("/api/articles", articleRouter);
 
-  // POST /api/articles - Create a new article (Admin protected)
-  app.post("/api/articles", adminAuth, async (req: Request, res: Response) => {
-    const { title, content, image_url, category, author } = req.body;
-
-    if (!title || !content || !author) {
-      return res.status(400).json({ message: "Title, content, and author are required" });
-    }
-
-    // Validate category
-    const validCategories = ["student", "teacher"];
-    const categoryValue = category && validCategories.includes(category) ? category : "student";
-
-    try {
-      const [result] = await pool.query(
-        "INSERT INTO articles (title, content, image_url, category, author) VALUES (?, ?, ?, ?, ?)",
-        [title, content, image_url || null, categoryValue, author]
-      );
-      res.status(201).json({
-        id: (result as any).insertId,
-        title,
-        content,
-        image_url,
-        category: categoryValue,
-        author,
-      });
-    } catch (error) {
-      console.error("Error creating article:", error);
-      res.status(500).json({ message: "Failed to create article" });
-    }
-  });
-
   // Admin Login Route (POST)
-  app.post("/api/admin/login", adminAuth, (req: Request, res: Response) => {
+  app.post("/api/admin/login", adminAuth, (req, res) => {
     // If adminAuth passes, the user is authenticated
     // In a real app, a JWT would be issued here. For simplicity, we'll just send a success message.
     res.json({ message: "Login successful" });
   });
 
   // Root route for health check or simple message
-  app.get("/", (req: Request, res: Response) => {
+  app.get("/", (req, res) => {
     res.status(200).send("Backend API is running!");
   });
 
@@ -82,9 +50,11 @@ async function startServer() {
   return app;
 }
 
+
+
 // Vercel serverless function entry point
-let app: express.Application;
-export default async (req: Request, res: Response) => {
+let app;
+export default async (req, res) => {
   if (!app) {
     app = await startServer();
   }
