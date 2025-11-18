@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import { initializeDatabase } from "./db.js";
 import articleRouter from "./routes/article.js";
 
+// Load environment variables
 dotenv.config({ path: "./.env" });
 
 const __filename = fileURLToPath(import.meta.url);
@@ -49,14 +50,15 @@ async function setupApp() {
     console.log("Application setup complete.");
   } catch (error) {
     console.error("Fatal error during application setup:", error);
-    // Log the error, but do not crash the process, as Vercel expects the function to be exported.
+    // Log the error, but do not crash the process.
   }
 }
 
 // Run the setup function
 setupApp();
 
-// Export the app for Vercel's serverless function handler
+// Export the app for Vercel's serverless function handler (via esbuild output)
+// esbuild will generate a file that exports this 'app' instance.
 export default app;
 
 // The original server start logic for local development
