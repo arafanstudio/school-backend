@@ -35,11 +35,8 @@ async function startServer() {
   app.use("/api/articles", articleRouter);
 
   // Admin Login Route (POST)
-  app.post("/api/admin/login", adminAuth, (req, res) => {
-    // If adminAuth passes, the user is authenticated
-    // In a real app, a JWT would be issued here. For simplicity, we'll just send a success message.
-    res.json({ message: "Login successful" });
-  });
+  app.post("/api/admin/login", adminAuth, (req, res) => {\n    // If adminAuth passes, the user is authenticated\n    // In a real app, a JWT would be issued here. For simplicity, we'll just send a success message.\n    res.json({ message: "Login successful" });\n  });
+    
 
   // Root route for health check or simple message
   app.get("/", (req, res) => {
