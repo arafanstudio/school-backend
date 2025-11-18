@@ -41,8 +41,8 @@ async function startServer() {
     res.json({ message: "Login successful" });
   });
 
-  // Admin Authentication Middleware for HTML pages
-const adminPageAuth = (req, res, next) => {
+  //   // Admin Authentication Middleware for HTML pages
+  const adminPageAuth = (req, res, next) => {
     if (req.url === '/' || req.url === '/index.html') {
         // Check if authenticated for the root page
         // NOTE: Vercel serverless functions don't maintain session/cookie state easily.
@@ -60,27 +60,25 @@ const adminPageAuth = (req, res, next) => {
     }
     // For other routes, proceed to the next middleware/route handler
     next();
-};
+  };
 
-// Admin Login Route (GET) - serves the login page
-app.get("/admin/login", (req, res) => {
-    res.sendFile(path.join(__dirname, 'AdminLogin.html'));
-});
+  // Admin Login Route (GET) - serves the login page
+  app.get("/admin/login", (req, res) => {
+      res.sendFile(path.join(__dirname, 'AdminLogin.html'));
+  });
 
-// Admin Article Creation Route (GET) - serves the article creation page
-app.get("/admin/create-article", (req, res) => {
-    res.sendFile(path.join(__dirname, 'ArticleCreation.html'));
-});
-};
+  // Admin Article Creation Route (GET) - serves the article creation page
+  app.get("/admin/create-article", (req, res) => {
+      res.sendFile(path.join(__dirname, 'ArticleCreation.html'));
+  });
 
-// Use the adminPageAuth middleware for the root path
-app.get('/', adminPageAuth);
+  // Use the adminPageAuth middleware for the root path
+  app.get('/', adminPageAuth);
 
-// Root route for health check or simple message
-  // The root route is now handled by adminPageAuth, so we can remove this.
-// app.get("/", (req, res) => {
-// res.status(200).send("Backend API is running!");
-// });
+  // Fallback route for health check or simple message
+  app.get("/health", (req, res) => {
+    res.status(200).send("Backend API is running!");
+  });
 
   // Export the app for Vercel serverless function
   return app;
