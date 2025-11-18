@@ -3,9 +3,9 @@ import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
-import { initializeDatabase } from "./db.js";
+import { initializeDatabase } from "./db.ts";
 import cors from "cors";
-import articleRouter from "./routes/article.js";
+import articleRouter from "./routes/article.ts";
 
 dotenv.config({ path: "./.env" });
 
@@ -39,6 +39,11 @@ async function startServer() {
     // If adminAuth passes, the user is authenticated
     // In a real app, a JWT would be issued here. For simplicity, we'll just send a success message.
     res.json({ message: "Login successful" });
+  });
+
+  // Root route for health check or simple message
+  app.get("/", (req, res) => {
+    res.status(200).send("Backend API is running!");
   });
 
   // Export the app for Vercel serverless function

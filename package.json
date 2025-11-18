@@ -4,6 +4,7 @@
   "description": "Backend for the school website, deployed on Vercel.",
   "main": "index.ts",
   "scripts": {
+    "vercel-build": "echo 'Building...'",
     "start": "ts-node index.ts"
   },
   "dependencies": {
