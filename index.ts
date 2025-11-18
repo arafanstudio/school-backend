@@ -43,9 +43,9 @@ async function startServer() {
 
     // Root route for Admin Login Page
   app.get("/", (req, res) => {
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-    res.sendFile(path.join(__dirname, "admin_login.html"));
+    // Use process.cwd() as a fallback for Vercel environment
+    const rootDir = process.cwd();
+    res.sendFile(path.join(rootDir, "admin_login.html"));
   });
 
   // Export the app for Vercel serverless function
