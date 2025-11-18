@@ -3,7 +3,7 @@ import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
-import { initializeDatabase } from "./db.ts";
+import { initializeDatabase } from "./db";
 import cors from "cors";
 import articleRouter from "./routes/article.ts";
 
