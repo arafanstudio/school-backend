@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 import { initializeDatabase } from "./db";
 import cors from "cors";
-import articleRouter from "./routes/article.ts";
+import articleRouter from "./routes/article";
 
 dotenv.config({ path: "./.env" });
 
