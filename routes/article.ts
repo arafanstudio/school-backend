@@ -36,36 +36,4 @@ router.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
-// POST /api/articles - Create a new article (Admin protected)
-router.post("/", async (req: Request, res: Response) => {
-  // NOTE: Authentication check will be added in index.ts middleware
-  const { title, content, image_url, category, author } = req.body;
-
-  if (!title || !content || !author) {
-    return res.status(400).json({ message: "Title, content, and author are required" });
-  }
-
-  // Validate category
-  const validCategories = ["student", "teacher"];
-  const categoryValue = category && validCategories.includes(category) ? category : "student";
-
-  try {
-    const [result] = await pool.query(
-      "INSERT INTO articles (title, content, image_url, category, author) VALUES (?, ?, ?, ?, ?)",
-      [title, content, image_url || null, categoryValue, author]
-    );
-    res.status(201).json({
-      id: (result as any).insertId,
-      title,
-      content,
-      image_url,
-      category: categoryValue,
-      author,
-    });
-  } catch (error) {
-    console.error("Error creating article:", error);
-    res.status(500).json({ message: "Failed to create article" });
-  }
-});
-
 export default router;
