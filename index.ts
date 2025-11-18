@@ -34,11 +34,6 @@ async function startServer() {
   // API Routes
   app.use("/api/articles", articleRouter);
 
-    // Admin Login Route (GET) - For frontend to access the page
-  app.get("/api/admin/login", (req, res) => {
-    res.status(200).json({ message: "Admin login endpoint is available" });
-  });
-
   // Admin Login Route (POST)
   app.post("/api/admin/login", adminAuth, (req, res) => {
     // If adminAuth passes, the user is authenticated
