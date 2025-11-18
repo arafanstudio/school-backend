@@ -6,11 +6,12 @@
     <title>Admin Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom styles to match the school-original design */
+        /* Custom styles to match the school-original design (Shadcn/Tailwind-based) */
         .card {
             background-color: #ffffff;
             border-radius: 0.5rem;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb; /* Added border for card */
         }
         .card-header {
             padding: 1.5rem;
@@ -34,8 +35,8 @@
         }
         .input {
             width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid #d1d5db;
+            padding: 0.625rem 0.75rem; /* Adjusted padding to match Shadcn input */
+            border: 1px solid #e5e7eb; /* Adjusted border color */
             border-radius: 0.375rem;
             font-size: 1rem;
             color: #1f2937;
@@ -44,11 +45,11 @@
         .input:focus {
             border-color: #3b82f6;
             outline: 0;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25); /* Adjusted focus ring */
         }
         .button {
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 0.625rem 1rem; /* Adjusted padding to match Shadcn button */
             font-size: 1rem;
             font-weight: 600;
             color: #ffffff;
@@ -67,6 +68,7 @@
         .text-muted-foreground {
             color: #6b7280;
         }
+        /* Toast styles (kept from original for functionality) */
         .toast-success {
             background-color: #10b981;
             color: white;
@@ -167,7 +169,6 @@
                     sessionStorage.setItem("isAdminAuthenticated", "true");
                     // Set a cookie that the server can read
                     document.cookie = "isAdminAuthenticated=true; path=/; max-age=3600"; // Expires in 1 hour
-                    sessionStorage.setItem("isAdminAuthenticated", "true");
                     sessionStorage.setItem("ADMIN_USERNAME", username);
                     sessionStorage.setItem("ADMIN_PASSWORD", password);
                     showToast("Login successful!", 'success');
