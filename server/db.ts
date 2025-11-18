@@ -6,13 +6,15 @@ import dotenv from "dotenv";
 dotenv.config({ path: ".env" });
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST, // Removed default 'localhost'
-  user: process.env.DB_USER, // Removed default 'root'
-  password: process.env.DB_PASSWORD, // Removed default ''
-  database: process.env.DB_DATABASE, // Removed default 'school_db'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  // Add connection timeout for robustness in serverless environment
+  connectTimeout: 10000, // 10 seconds
 });
 
 export async function initializeDatabase() {
@@ -38,13 +40,11 @@ export async function initializeDatabase() {
     connection.release();
     console.log("Database and 'articles' table initialized successfully.");
   } catch (error) {
-    console.error("Error initializing database:", error);
-    // In a serverless environment, process.exit(1) will crash the function.
-    // We log the error but allow the function to continue, as the error might be 
-    // a transient connection issue or the table already exists.
-    // The actual API routes will fail later if the connection is truly broken.
-    console.log("Note: Database initialization failed. Check your DB connection settings in Vercel.");
-    // Removed process.exit(1);
+    // Log the error object for better debugging in Vercel logs
+    console.error("FATAL DATABASE INITIALIZATION ERROR:", error.message);
+    console.error("Error details:", JSON.stringify(error, Object.getOwnPropertyNames(error)));
+    console.log("Note: Database initialization failed. This is likely due to incorrect environment variables or database accessibility from Vercel.");
+    // Allow the function to continue, but subsequent DB calls will fail.
   }
 }
 
